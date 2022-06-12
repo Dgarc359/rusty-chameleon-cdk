@@ -1,6 +1,6 @@
 # 🦀 Rusty Chameleon 🦎
 
-Discord Bot leveraging AWS Lambda
+Discord Bot written in rust, powered by AWS Lambda. Packaged and Deployed with AWS Cdk.
 
 ## Setup
 
