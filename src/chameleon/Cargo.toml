@@ -17,7 +17,6 @@ tokio = { version = "1", features = ["macros"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
 dryoc = "0.3.12"
-dotenv = "0.15.0"
 http = "0.2.8"
 serde = "1.0.136"
 serde_json = "1.0.81"
