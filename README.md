@@ -10,6 +10,7 @@ Discord Bot leveraging AWS Lambda
 ## Scripts
 
 `setup:dev:env`   installs necessary dependencies such as cargo-lambda for developing
+
 `gen:lambda:rust`   generates a rust lambda directory in src, pass in a name for your directory, ex: `yarn gen:lambda:rust example-project`
 
 ## Useful commands
