@@ -1,4 +1,4 @@
-# Rusty Chameleon
+# 🦀 Rusty Chameleon 🦎
 
 Discord Bot leveraging AWS Lambda
 
