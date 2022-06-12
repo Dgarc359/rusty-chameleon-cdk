@@ -4,13 +4,15 @@ use dotenv::dotenv;
 
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
-    // Extract some useful information from the request
+
     dotenv().ok();
-    let signature = event.headers().get("X-Signature-Ed25519").unwrap().to_owned();
+    let signature = event.headers().get("X-Signature-Ed25519").unwrap();
     let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
 
-    let timestamp = event.headers().get("X-Signature-Timestamp").unwrap().to_string();
-    let body = event.body();
+    let timestamp = String::from_utf8_lossy(event.headers().get("X-Signature-Timestamp").unwrap().as_bytes()).into_owned();
+
+
+    let body = event.body().to_string();
 
     let message = timestamp.push_str(body).as_bytes();
 
