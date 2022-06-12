@@ -6,16 +6,27 @@
   },
   "scripts": {
     "build": "tsc",
+    "deploy": "yarn package:rust && yarn cdk deploy",
+    "package:rust": "yarn cargo:build",
+    "cargo:build": "cd src/chameleon/ && cargo lambda build --release --arm64 --output-format zip",
+    "cargo:zip": "cd src/chameleon/target/lambda/chameleon && ls && zip lambda.zip bootstrap",
+    "cargo:check": "cd src/chameleon/ && cargo check",
+    "cargo:clean": "cd src/chameleon/ && cargo clean",
+    "cargo:clean-build": "yarn run cargo:clean && yarn run cargo build",
+    "create:rust:lambda": "cd src/ && cargo lambda new",
+    "setup-env": "cargo install cargo-lambda",
+    "docs:rust": "cd src/chameleon && cargo doc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "synth": "yarn cdk synth"
   },
   "devDependencies": {
     "@types/jest": "^26.0.10",
-    "@types/node": "10.17.27",
+    "@types/node": "^17.0.42",
+    "aws-cdk": "2.20.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "aws-cdk": "2.20.0",
     "ts-node": "^9.0.0",
     "typescript": "~3.9.7"
   },
