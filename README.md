@@ -1,10 +1,14 @@
-# Welcome to your CDK TypeScript project
+# Rusty Chameleon
 
-This is a blank project for TypeScript development with CDK.
+Discord Bot leveraging AWS Lambda
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## Setup
+
+* Run `yarn/npm setup:dev:env`
+* tbd...
 
 ## Scripts
+
 `setup:dev:env`   installs necessary dependencies such as cargo-lambda for developing
 `gen:lambda:rust`   generates a rust lambda directory in src, pass in a name for your directory, ex: `yarn gen:lambda:rust example-project`
 
