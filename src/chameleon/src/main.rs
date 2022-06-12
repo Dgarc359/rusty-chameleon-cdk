@@ -27,13 +27,15 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
         &pub_key_bytes,
     );
 
+
     // Return something that implements IntoResponse.
     // It will be serialized to the right response event automatically by the runtime
     let resp = Response::builder()
         .status(200)
         .header("content-type", "text/html")
-        .body("Hello AWS Lambda HTTP request")
+        .body("'{ \"type\": 1 }'")
         .map_err(Box::new)?;
+    
     Ok(resp)
 }
 

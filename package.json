@@ -13,7 +13,7 @@
     "cargo:check": "cd src/chameleon/ && cargo check",
     "cargo:clean": "cd src/chameleon/ && cargo clean",
     "cargo:clean-build": "yarn run cargo:clean && yarn run cargo build",
-    "create:rust:lambda": "cd src/ && cargo lambda new",
+    "gen:lambda:rust": "cd src/ && cargo lambda new",
     "setup-env": "cargo install cargo-lambda",
     "docs:rust": "cd src/chameleon && cargo doc",
     "watch": "tsc -w",

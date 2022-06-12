@@ -1,5 +1,5 @@
 [package]
-name = "chameleon"
+name = "example"
 version = "0.1.0"
 edition = "2021"
 
@@ -11,13 +11,9 @@ edition = "2021"
 # and it will keep the alphabetic ordering for you.
 
 [dependencies]
-lambda_http = "0.5.2"
 lambda_runtime = "0.5.1"
+serde = "1.0.136"
 tokio = { version = "1", features = ["macros"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
-dryoc = "0.3.12"
-dotenv = "0.15.0"
-http = "0.2.8"
-serde = "1.0.136"
 serde_json = "1.0.81"
