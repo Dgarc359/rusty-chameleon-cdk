@@ -10,7 +10,7 @@
     "build": "tsc",
     "deploy": "yarn package:rust && yarn cdk deploy",
     "package:rust": "yarn cargo:build",
-    "cargo:build": "cd src/chameleon/ && cargo lambda build --release --arm64 --output-format zip",
+    "cargo:build": "cd src/chameleon/ && cargo lambda build --release --output-format zip",
     "cargo:check": "cd src/chameleon/ && cargo check",
     "cargo:clean": "cd src/chameleon/ && cargo clean",
     "cargo:clean-build": "yarn run cargo:clean && yarn cargo:build",
@@ -31,6 +31,8 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.20.0",
+    "aws-sdk": "^2.1153.0",
+    "aws-xray-sdk-core": "^3.3.6",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.16"
   }

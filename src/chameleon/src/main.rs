@@ -1,4 +1,4 @@
-use lambda_http::{run, service_fn, Error, IntoResponse, Request, RequestExt, Response, Body};
+use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
 use dryoc::{classic::crypto_sign::crypto_sign_verify_detached};
 // use reqwest;
 use std::env;
@@ -36,7 +36,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
             
             Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
         },
-        Err(e) => Response::builder().status(418).header("x", "y").body("")?,
+        Err(_e) => Response::builder().status(418).header("x", "y").body("")?,
     })
 
 
