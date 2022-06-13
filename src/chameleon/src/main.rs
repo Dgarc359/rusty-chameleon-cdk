@@ -1,6 +1,6 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, RequestExt, Response, Body};
 use dryoc::{classic::crypto_sign::crypto_sign_verify_detached};
-// use dotenv::dotenv;
+// use reqwest;
 use std::env;
 use std::fmt::Write;
 
@@ -21,22 +21,34 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let pub_key_bytes: [u8; 32] = public_key.as_bytes().try_into().unwrap();
 
     // let token = env token
-    let is_verified = crypto_sign_verify_detached(
+    Ok(match crypto_sign_verify_detached(
         &sig_bytes,
         &message,
         &pub_key_bytes,
-    );
+    ) {
+        Ok(_) => {
+            // if interaction in request, then post interaction to discord's endpoint
+            // let client = reqwest::Client::new();
+            // let res = client.post("http://httpbin.org/post")
+            //     .body("body")
+            //     .send()
+            //     .await();
+            
+            Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
+        },
+        Err(e) => Response::builder().status(418).header("x", "y").body("")?,
+    })
 
 
     // Return something that implements IntoResponse.
     // It will be serialized to the right response event automatically by the runtime
-    let resp = Response::builder()
-        .status(200)
-        .header("content-type", "text/html")
-        .body("'{ \"type\": 1 }'")
-        .map_err(Box::new)?;
+    // let resp = Response::builder()
+    //     .status(200)
+    //     .header("content-type", "text/html")
+    //     .body("'{ \"type\": 1 }'")
+    //     .map_err(Box::new)?;
     
-    Ok(resp)
+    // Ok(resp)
 }
 
 #[tokio::main]
