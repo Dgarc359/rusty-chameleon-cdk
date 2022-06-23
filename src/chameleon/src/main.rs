@@ -1,14 +1,24 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
-// use reqwest;
 use std::env;
 use std::fmt::Write;
+use sodiumoxide::crypto::sign;
+use hex;
+// use sodiumoxide::crypto::sign::{Signature::from_str};
 
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     let signature = event.headers().get("X-Signature-Ed25519").unwrap();
+    // let nacl_sig = sign::Signature
+
+    // let sig_bytes: [u8; 64];
+    let sig_bytes;
+    let decoded_sig_bytes = hex::decode_to_slice(signature, &mut sig_bytes as &mut [u8])?;
+    // let sodium_signed = sign::
+    // hex::decode(signature, &sig_bytes).unwrap();
     println!("{:?}", signature);
-    let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
+    // let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
+    // let sig_bytes: [u8; 64] = hex::decode(signature).try_into().unwrap();
 
     let mut timestamp = String::from_utf8_lossy(event.headers().get("X-Signature-Timestamp").unwrap().as_bytes()).into_owned();
 
@@ -21,25 +31,31 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let pub_key_bytes: [u8; 32] = public_key.as_bytes().try_into().unwrap();
 
     // let token = env token
-
-    // TODO: refactor
-    Ok(match crypto_sign_verify_detached(
-        &sig_bytes,
-        &message,
-        &pub_key_bytes,
-    ) {
-        Ok(_) => {
-            // if interaction in request, then post interaction to discord's endpoint
-            // let client = reqwest::Client::new();
-            // let res = client.post("http://httpbin.org/post")
-            //     .body("body")
-            //     .send()
-            //     .await();
-            
-            Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
-        },
-        Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
+    Ok(match sign::verify_detached(
+        &decoded_sig_bytes, 
+        &message, 
+        &public_key) {
+            Ok(_) => Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?,
+            Err(e) => Response::builder().status(401).body("Invalid request signature")?,
     })
+    // TODO: refactor
+    // Ok(match crypto_sign_verify_detached(
+    //     &sig_bytes,
+    //     &message,
+    //     &pub_key_bytes,
+    // ) {
+    //     Ok(_) => {
+    //         // if interaction in request, then post interaction to discord's endpoint
+    //         // let client = reqwest::Client::new();
+    //         // let res = client.post("http://httpbin.org/post")
+    //         //     .body("body")
+    //         //     .send()
+    //         //     .await();
+            
+    //         Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
+    //     },
+    //     Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
+    // })
 
 
     // Return something that implements IntoResponse.

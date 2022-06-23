@@ -18,6 +18,7 @@ export class RustyChameleonCdkStack extends Stack {
       handler: 'not.required',
       environment: {
         RUST_BACKTRACE: '1',
+        PUBLIC_KEY: "TEST",
       },
       architecture: Architecture.X86_64,
       // allowedOrigins: ['https://discord.com'],
