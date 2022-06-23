@@ -3,7 +3,7 @@ use std::env;
 use std::fmt::Write;
 use sodiumoxide::crypto::sign;
 use hex;
-use sodiumoxide::crypto::sign::ed25519::{Signature};
+// use sodiumoxide::crypto::sign::ed25519::Signature::from_str(hex: &str);
 
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
@@ -13,8 +13,12 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     // let sig_bytes: [u8; 64];
     let sig_bytes;
-    let decoded_sig_bytes = hex::decode_to_slice(signature, &mut sig_bytes as &mut [u8])?;
-    let sodium_sig = new Signature(decoded_sig_bytes);
+    let decoded_sig_bytes = hex::decode_to_slice(signature, &mut sig_bytes as &mut [u8; 64])?;
+    let test = sign::ed25519::Signature::from_str(decoded_sig_bytes);
+
+    // let sig: &sign::ed25519::Signature = sign::ed25519::Signature::from_str(decoded_sig_bytes);
+
+    // let sodium_sig = new Signature(decoded_sig_bytes);
     // hex::decode(signature, &sig_bytes).unwrap();
     println!("{:?}", signature);
     // let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
