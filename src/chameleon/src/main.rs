@@ -3,7 +3,7 @@ use std::env;
 use std::fmt::Write;
 use sodiumoxide::crypto::sign;
 use hex;
-// use sodiumoxide::crypto::sign::{Signature::from_str};
+use sodiumoxide::crypto::sign::ed25519::{Signature};
 
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
@@ -14,7 +14,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     // let sig_bytes: [u8; 64];
     let sig_bytes;
     let decoded_sig_bytes = hex::decode_to_slice(signature, &mut sig_bytes as &mut [u8])?;
-    // let sodium_signed = sign::
+    let sodium_sig = new Signature(decoded_sig_bytes);
     // hex::decode(signature, &sig_bytes).unwrap();
     println!("{:?}", signature);
     // let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
@@ -34,7 +34,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     Ok(match sign::verify_detached(
         &decoded_sig_bytes, 
         &message, 
-        &public_key) {
+        &pub_key_bytes) {
             Ok(_) => Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?,
             Err(e) => Response::builder().status(401).body("Invalid request signature")?,
     })
