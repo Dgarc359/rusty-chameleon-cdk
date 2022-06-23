@@ -15,25 +15,32 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let mut sig_bytes = [0; 64];
     hex::decode_to_slice(signature, &mut sig_bytes)?;
 
-    println!("{:?}", sig_bytes);
+    println!("sig_bytes: {:?}", sig_bytes);
 
     let mut timestamp = String::from_utf8_lossy(event.headers().get("X-Signature-Timestamp").unwrap().as_bytes()).into_owned();
 
     write!(&mut timestamp, "{:?}", event.body()).unwrap();
     let message = timestamp.into_bytes();
+    println!("message: {:?}", message);
 
     let public_key = env::var("PUBLIC_KEY").unwrap();
     let mut pub_key_bytes = [0; 32];
-    
+
     hex::decode_to_slice(public_key, &mut pub_key_bytes)?;
-    println!("{:?}",pub_key_bytes);
+    println!("pub_key_bytes: {:?}",pub_key_bytes);
     
     Ok(match classic::crypto_sign::crypto_sign_verify_detached(
         &sig_bytes, 
         &message, 
         &pub_key_bytes) {
-        Ok(_) => Response::builder().status(200).header("content-type", "text/html").body("'{ \"type\": 1 }'").map_err(Box::new)?,
-        Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
+        Ok(_) => {
+            println!("Building OK response");
+            Response::builder().status(200).header("content-type", "text/html").body("'{ \"type\": 1 }'").map_err(Box::new)?
+        },
+        Err(_e) => {
+            println!("{:?}",_e);
+            Response::builder().status(401).body("Invalid request signature")?
+        },
     })
 }
 
