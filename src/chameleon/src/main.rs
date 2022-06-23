@@ -12,9 +12,9 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     // let nacl_sig = sign::Signature
 
     // let sig_bytes: [u8; 64];
-    let sig_bytes;
-    let decoded_sig_bytes = hex::decode_to_slice(signature, &mut sig_bytes as &mut [u8; 64])?;
-    let test = sign::ed25519::Signature::from_str(decoded_sig_bytes);
+    let mut sig_bytes = [0; 64];
+    hex::decode_to_slice(signature, &mut sig_bytes)?;
+    let signature = sign::ed25519::Signature::from_bytes(&sig_bytes).unwrap();
 
     // let sig: &sign::ed25519::Signature = sign::ed25519::Signature::from_str(decoded_sig_bytes);
 
@@ -32,16 +32,20 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let message = timestamp.into_bytes();
 
     let public_key = env::var("PUBLIC_KEY").unwrap();
-    let pub_key_bytes: [u8; 32] = public_key.as_bytes().try_into().unwrap();
+    let mut pub_key_bytes = [0; 32];
+    hex::decode_to_slice(public_key, &mut pub_key_bytes)?;
+    let public_key = sign::ed25519::PublicKey::from_slice(&pub_key_bytes).unwrap();
 
     // let token = env token
-    Ok(match sign::verify_detached(
-        &decoded_sig_bytes, 
+    if sign::verify_detached(
+        &signature, 
         &message, 
-        &pub_key_bytes) {
-            Ok(_) => Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?,
-            Err(e) => Response::builder().status(401).body("Invalid request signature")?,
-    })
+        &public_key) {
+        Ok(Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?)
+    }
+    else {
+        Ok(Response::builder().status(401).body("Invalid request signature")?)
+    }
     // TODO: refactor
     // Ok(match crypto_sign_verify_detached(
     //     &sig_bytes,
