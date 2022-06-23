@@ -1,7 +1,9 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
 use std::env;
 use std::fmt::Write;
-use sodiumoxide::crypto::sign;
+// use sodiumoxide::crypto::sign;
+use dryoc::classic;
+
 use hex;
 // use sodiumoxide::crypto::sign::ed25519::Signature::from_str(hex: &str);
 
@@ -14,13 +16,14 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     // let sig_bytes: [u8; 64];
     let mut sig_bytes = [0; 64];
     hex::decode_to_slice(signature, &mut sig_bytes)?;
-    let signature = sign::ed25519::Signature::from_bytes(&sig_bytes).unwrap();
+    // let signature = sign::ed25519:`:Signature::from_bytes(&sig_bytes).unwrap();
+    // let signature = classic::crypto_sign_ed25519::Signature::from_bytes(&sig_bytes).unwrap();
 
     // let sig: &sign::ed25519::Signature = sign::ed25519::Signature::from_str(decoded_sig_bytes);
 
     // let sodium_sig = new Signature(decoded_sig_bytes);
     // hex::decode(signature, &sig_bytes).unwrap();
-    println!("{:?}", signature);
+    println!("{:?}", sig_bytes);
     // let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
     // let sig_bytes: [u8; 64] = hex::decode(signature).try_into().unwrap();
 
@@ -34,18 +37,20 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let public_key = env::var("PUBLIC_KEY").unwrap();
     let mut pub_key_bytes = [0; 32];
     hex::decode_to_slice(public_key, &mut pub_key_bytes)?;
-    let public_key = sign::ed25519::PublicKey::from_slice(&pub_key_bytes).unwrap();
+    // let public_key = sign::ed25519::PublicKey::from_slice(&pub_key_bytes).unwrap();
 
     // let token = env token
-    if sign::verify_detached(
-        &signature, 
+    // if sign::verify_detached(
+    Ok(match classic::crypto_sign::crypto_sign_verify_detached(
+        &sig_bytes, 
         &message, 
-        &public_key) {
-        Ok(Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?)
-    }
-    else {
-        Ok(Response::builder().status(401).body("Invalid request signature")?)
-    }
+        &pub_key_bytes) {
+        Ok(_) => Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?,
+        Err(e) => Response::builder().status(401).body("Invalid request signature")?,
+    })
+    // else {
+    //     Ok(Response::builder().status(401).body("Invalid request signature")?)
+    // }
     // TODO: refactor
     // Ok(match crypto_sign_verify_detached(
     //     &sig_bytes,

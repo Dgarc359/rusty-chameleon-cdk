@@ -1,10 +1,13 @@
 # 🦀 Rusty Chameleon 🦎
 
-Discord Bot written in rust, powered by AWS Lambda. Packaged and Deployed with AWS Cdk.
+Discord Bot written in rust, powered by AWS Lambda. Packaged and Deployed with AWS CDK.
 
 ## Setup
 
+* Run install script for your OS (ex: `yarn/npm install:arch`)
 * Run `yarn/npm setup:dev:env`
+* Install lisodium
+* In terminal: `sudo ldconfig`
 * tbd...
 
 ## Scripts

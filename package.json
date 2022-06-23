@@ -5,6 +5,7 @@
     "rusty-chameleon-cdk": "bin/rusty-chameleon-cdk.js"
   },
   "scripts": {
+    "install:arch": "yay openssl",
     "setup:dev:env": "cargo install cargo-lambda",
     "gen:lambda:rust": "cd src/ && cargo lambda new",
     "build": "tsc",
