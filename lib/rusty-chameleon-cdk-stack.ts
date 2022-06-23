@@ -20,7 +20,9 @@ export class RustyChameleonCdkStack extends Stack {
         RUST_BACKTRACE: '1',
       },
       architecture: Architecture.X86_64,
+      // allowedOrigins: ['https://discord.com'],
     });
+
 
     //const testLambda = new NodejsFunction(this, 'test-lambda', {
     //  entry: path.join(__dirname, '../src/test-lambda/test.ts')

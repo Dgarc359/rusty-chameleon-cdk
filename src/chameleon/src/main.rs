@@ -1,5 +1,4 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
-use dryoc::{classic::crypto_sign::crypto_sign_verify_detached};
 // use reqwest;
 use std::env;
 use std::fmt::Write;
@@ -8,6 +7,7 @@ use std::fmt::Write;
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     let signature = event.headers().get("X-Signature-Ed25519").unwrap();
+    println!("{:?}", signature);
     let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
 
     let mut timestamp = String::from_utf8_lossy(event.headers().get("X-Signature-Timestamp").unwrap().as_bytes()).into_owned();
@@ -21,6 +21,8 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let pub_key_bytes: [u8; 32] = public_key.as_bytes().try_into().unwrap();
 
     // let token = env token
+
+    // TODO: refactor
     Ok(match crypto_sign_verify_detached(
         &sig_bytes,
         &message,
