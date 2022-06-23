@@ -6,10 +6,12 @@ import * as path from 'path';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Parallel, StateMachine, Pass} from 'aws-cdk-lib/aws-stepfunctions';
 import * as sfnTask from 'aws-cdk-lib/aws-stepfunctions-tasks';
+import {config} from 'dotenv';
 
 export class RustyChameleonCdkStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+    config(); // config dotenv
 
     const chameleon = new lambda.Function(this, 'RustyChameleonlambda', {
       runtime: Runtime.PROVIDED_AL2,
@@ -18,7 +20,7 @@ export class RustyChameleonCdkStack extends Stack {
       handler: 'not.required',
       environment: {
         RUST_BACKTRACE: '1',
-        PUBLIC_KEY: "TEST",
+        PUBLIC_KEY: process.env.PUBLIC_KEY || "", // will throw invalidStringLength error if not set
       },
       architecture: Architecture.X86_64,
       // allowedOrigins: ['https://discord.com'],

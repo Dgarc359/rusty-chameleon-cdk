@@ -35,6 +35,7 @@
     "aws-sdk": "^2.1153.0",
     "aws-xray-sdk-core": "^3.3.6",
     "constructs": "^10.0.0",
+    "dotenv": "^16.0.1",
     "source-map-support": "^0.5.16"
   }
 }

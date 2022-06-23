@@ -11,75 +11,30 @@ use hex;
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     let signature = event.headers().get("X-Signature-Ed25519").unwrap();
-    // let nacl_sig = sign::Signature
 
-    // let sig_bytes: [u8; 64];
     let mut sig_bytes = [0; 64];
     hex::decode_to_slice(signature, &mut sig_bytes)?;
-    // let signature = sign::ed25519:`:Signature::from_bytes(&sig_bytes).unwrap();
-    // let signature = classic::crypto_sign_ed25519::Signature::from_bytes(&sig_bytes).unwrap();
 
-    // let sig: &sign::ed25519::Signature = sign::ed25519::Signature::from_str(decoded_sig_bytes);
-
-    // let sodium_sig = new Signature(decoded_sig_bytes);
-    // hex::decode(signature, &sig_bytes).unwrap();
     println!("{:?}", sig_bytes);
-    // let sig_bytes: [u8; 64] =  signature.as_bytes().try_into().unwrap();
-    // let sig_bytes: [u8; 64] = hex::decode(signature).try_into().unwrap();
 
     let mut timestamp = String::from_utf8_lossy(event.headers().get("X-Signature-Timestamp").unwrap().as_bytes()).into_owned();
-
-    // let body = format!("{:?}", event.body());
 
     write!(&mut timestamp, "{:?}", event.body()).unwrap();
     let message = timestamp.into_bytes();
 
     let public_key = env::var("PUBLIC_KEY").unwrap();
     let mut pub_key_bytes = [0; 32];
+    
     hex::decode_to_slice(public_key, &mut pub_key_bytes)?;
-    // let public_key = sign::ed25519::PublicKey::from_slice(&pub_key_bytes).unwrap();
-
-    // let token = env token
-    // if sign::verify_detached(
+    println!("{:?}",pub_key_bytes);
+    
     Ok(match classic::crypto_sign::crypto_sign_verify_detached(
         &sig_bytes, 
         &message, 
         &pub_key_bytes) {
-        Ok(_) => Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?,
-        Err(e) => Response::builder().status(401).body("Invalid request signature")?,
+        Ok(_) => Response::builder().status(200).header("content-type", "text/html").body("'{ \"type\": 1 }'").map_err(Box::new)?,
+        Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
     })
-    // else {
-    //     Ok(Response::builder().status(401).body("Invalid request signature")?)
-    // }
-    // TODO: refactor
-    // Ok(match crypto_sign_verify_detached(
-    //     &sig_bytes,
-    //     &message,
-    //     &pub_key_bytes,
-    // ) {
-    //     Ok(_) => {
-    //         // if interaction in request, then post interaction to discord's endpoint
-    //         // let client = reqwest::Client::new();
-    //         // let res = client.post("http://httpbin.org/post")
-    //         //     .body("body")
-    //         //     .send()
-    //         //     .await();
-            
-    //         Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
-    //     },
-    //     Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
-    // })
-
-
-    // Return something that implements IntoResponse.
-    // It will be serialized to the right response event automatically by the runtime
-    // let resp = Response::builder()
-    //     .status(200)
-    //     .header("content-type", "text/html")
-    //     .body("'{ \"type\": 1 }'")
-    //     .map_err(Box::new)?;
-    
-    // Ok(resp)
 }
 
 #[tokio::main]
