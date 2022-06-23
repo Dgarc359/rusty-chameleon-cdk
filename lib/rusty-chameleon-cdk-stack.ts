@@ -22,28 +22,28 @@ export class RustyChameleonCdkStack extends Stack {
       architecture: Architecture.X86_64,
     });
 
-    const testLambda = new NodejsFunction(this, 'test-lambda', {
-      entry: path.join(__dirname, '../src/test-lambda/test.ts')
-    })
+    //const testLambda = new NodejsFunction(this, 'test-lambda', {
+    //  entry: path.join(__dirname, '../src/test-lambda/test.ts')
+    //})
     
-    const parallel = new Parallel(this, 'start');
-    const testOurLambda = new sfnTask.LambdaInvoke(this, 'test-our-lambda', {
-      lambdaFunction: testLambda,
+    //const parallel = new Parallel(this, 'start');
+    //const testOurLambda = new sfnTask.LambdaInvoke(this, 'test-our-lambda', {
+    //  lambdaFunction: testLambda,
 
-      outputPath: '$.Payload'
-    });
+    //  outputPath: '$.Payload'
+    //});
 
-    const testRustLambda = new sfnTask.LambdaInvoke(this, 'test-rust-lambda', {
-      lambdaFunction: chameleon,
-      outputPath: '$.Payload'
-    })
+    //const testRustLambda = new sfnTask.LambdaInvoke(this, 'test-rust-lambda', {
+    //  lambdaFunction: chameleon,
+    //  outputPath: '$.Payload'
+    //})
 
-    parallel.branch(testOurLambda);
-    parallel.branch(testRustLambda);
+    //parallel.branch(testOurLambda);
+    //parallel.branch(testRustLambda);
 
-    const stepFnStateMachine = new StateMachine(this, 'state-machine', {
-      definition: parallel,
+    //const stepFnStateMachine = new StateMachine(this, 'state-machine', {
+    //  definition: parallel,
       
-    }) 
+    //}) 
   }
 }

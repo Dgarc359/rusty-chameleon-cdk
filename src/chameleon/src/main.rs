@@ -36,7 +36,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
             
             Response::builder().status(200).header("content-type", "text/html").body(";{ \"type\": 1 }'").map_err(Box::new)?
         },
-        Err(_e) => Response::builder().status(418).header("x", "y").body("")?,
+        Err(_e) => Response::builder().status(401).body("Invalid request signature")?,
     })
 
 
