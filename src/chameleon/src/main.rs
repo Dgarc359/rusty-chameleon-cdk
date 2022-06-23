@@ -1,19 +1,18 @@
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
 use std::env;
 use std::fmt::Write;
-// use sodiumoxide::crypto::sign;
 use dryoc::classic;
-
 use hex;
-// use sodiumoxide::crypto::sign::ed25519::Signature::from_str(hex: &str);
 
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     let signature = event.headers().get("X-Signature-Ed25519").unwrap();
+    println!("signature: {:?}", signature);
 
     let mut sig_bytes = [0; 64];
     hex::decode_to_slice(signature, &mut sig_bytes)?;
+    
 
     println!("sig_bytes: {:?}", sig_bytes);
 
