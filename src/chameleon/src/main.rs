@@ -29,6 +29,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
         .get("X-Signature-Ed25519")
         .unwrap()
         .to_str()?;
+
     let timestamp = event
         .headers()
         .get("X-Signature-Timestamp")
@@ -44,19 +45,23 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
             timestamp.as_bytes(),
             public_key.as_bytes(),
         ) {
-            Ok(_) => {
+            Ok(ok) if ok => {
                 println!("Building OK response");
                 Response::builder()
                     .status(200)
-                    .header("content-type", "text/html")
-                    .body("'{ \"type\": 1 }'")
+                    .header("content-type", "application/json")
+                    .body("{ \"type\": 1 }".to_string())
                     .map_err(Box::new)?
             }
-            Err(_e) => {
-                println!("{:?}", _e);
+            Ok(_) => Response::builder()
+                .status(401)
+                .body("Invalid request signature".to_string())?,
+            Err(e) => {
+                println!("An unknown error occured {:?}", e);
+
                 Response::builder()
-                    .status(401)
-                    .body("Invalid request signature")?
+                    .status(500)
+                    .body(format!("An unknown error occured {:?}", e))?
             }
         },
     )
