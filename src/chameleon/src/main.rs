@@ -62,8 +62,8 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                 println!("Building OK response");
                 let body: CustomBody = serde_json::from_slice(&event.body() as &[u8]).unwrap();
                 // let body = String::from_utf8_lossy(&event.body());
-                println!("{:#?}", body);
-                if body["kind"] == "1" {
+                // println!("{:#?}", body);
+                if &body.kind == &1i64 {
                     println!("Received Ping for ack");
                     Response::builder()
                         .status(200)
