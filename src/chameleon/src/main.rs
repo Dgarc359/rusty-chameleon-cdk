@@ -22,7 +22,6 @@ fn verify_key(
     }
 }
 
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let signature = event
         .headers()
