@@ -8,6 +8,11 @@ Discord Bot written in rust, powered by AWS Lambda. Packaged and Deployed with A
 * Run `yarn/npm setup:dev:env`
 * tbd...
 
+## Deploy
+
+* Set up AWS CDK (Bootstrap CDK/ AWS CLI Credentials / npm || yarn i aws-cdk )
+* `yarn deploy`
+
 ## Scripts
 
 `setup:dev:env`   installs necessary dependencies such as cargo-lambda for developing
