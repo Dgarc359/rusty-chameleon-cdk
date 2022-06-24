@@ -11,7 +11,7 @@ If you encounter any issues with setup (during any prescribed install / setup sc
 
 ## Deploy
 
-* Set up AWS CDK (Bootstrap CDK/ AWS CLI Credentials / npm || yarn i aws-cdk )
+* Set up AWS CDK (Bootstrap CDK/ AWS CLI Credentials / `npm / yarn i aws-cdk` )
 * `yarn deploy`
 
 ## Scripts
