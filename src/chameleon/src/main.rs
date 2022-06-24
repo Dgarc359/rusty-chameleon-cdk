@@ -4,7 +4,6 @@ use std::fmt::Write;
 use dryoc::classic;
 use hex;
 
-/// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
     let signature = event.headers().get("X-Signature-Ed25519").unwrap().to_str().unwrap();
