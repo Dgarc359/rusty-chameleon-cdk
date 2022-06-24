@@ -7,7 +7,9 @@ use hex;
 /// - https://github.com/awslabs/aws-lambda-rust-runtime/tree/main/lambda-http/examples
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
-    let signature = event.headers().get("X-Signature-Ed25519").unwrap();
+    let signature = event.headers().get("X-Signature-Ed25519").unwrap().to_str().unwrap();
+    // let signature = &signature[1..1];
+
     println!("signature: {:?}", signature);
 
     let mut sig_bytes = [0; 64];
