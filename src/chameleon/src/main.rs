@@ -22,6 +22,13 @@ fn verify_key(
     }
 }
 
+
+/// Call this command if event.body.type is '2'
+// fn dispatch_command() -> Result<bool, Error> {
+
+    
+// }
+
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let signature = event
         .headers()
@@ -46,11 +53,38 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
         ) {
             Ok(ok) if ok => {
                 println!("Building OK response");
-                Response::builder()
-                    .status(200)
-                    .header("content-type", "application/json")
-                    .body("{ \"type\": 1 }".to_string())
-                    .map_err(Box::new)?
+                let body = String::from_utf8_lossy(&event.body());
+                if body == "1" {
+                    println!("Received Ping for ack");
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
+                } else {
+                    println!("non type 1 received -- sending simple response for now");
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
+                }
+
+                // check event.body for type
+                // if body == "1" {
+                    // Response::builder()
+                    //     .status(200)
+                    //     .header("content-type", "application/json")
+                    //     .body("{ \"type\": 1 }".to_string())
+                    //     .map_err(Box::new)?,
+                // }
+
+
+                // Response::builder()
+                //     .status(200)
+                //     .header("content-type", "application/json")
+                //     .body("{ \"type\": 1 }".to_string())
+                //     .map_err(Box::new)?
             }
             Ok(_) => Response::builder()
                 .status(401)
