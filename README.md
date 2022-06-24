@@ -16,9 +16,9 @@ If you encounter any issues with setup (during any prescribed install / setup sc
 
 ## Scripts
 
-`setup:dev:env`   installs necessary dependencies such as cargo-lambda for developing
+* `setup:dev:env`   installs necessary dependencies such as cargo-lambda for developing
 
-`gen:lambda:rust`   generates a rust lambda directory in src, pass in a name for your directory, ex: `yarn gen:lambda:rust example-project`
+* `gen:lambda:rust`   generates a rust lambda directory in src, pass in a name for your directory, ex: `yarn gen:lambda:rust example-project`
 
 ## Useful commands
 
