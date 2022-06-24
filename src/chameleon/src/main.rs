@@ -1,6 +1,7 @@
 use dryoc::classic;
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
 use std::env;
+use serde::{Serialize, Deserialize};
 
 fn verify_key(
     body: &[u8],
@@ -29,6 +30,12 @@ fn verify_key(
     
 // }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct CustomBody {
+    #[serde(rename = "type")]
+    kind: i64,
+}
+
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
     let signature = event
         .headers()
@@ -53,9 +60,10 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
         ) {
             Ok(ok) if ok => {
                 println!("Building OK response");
-                let body = String::from_utf8_lossy(&event.body());
-                println!("{body:?}");
-                if body == "1" {
+                let body: CustomBody = serde_json::from_slice(&event.body() as &[u8]).unwrap();
+                // let body = String::from_utf8_lossy(&event.body());
+                println!("{:#?}", body);
+                if body["kind"] == "1" {
                     println!("Received Ping for ack");
                     Response::builder()
                         .status(200)
