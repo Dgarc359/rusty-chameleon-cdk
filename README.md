@@ -3,6 +3,7 @@
 Discord Bot written in rust, powered by AWS Lambda. Packaged and Deployed with AWS CDK.
 
 ## Setup
+If you encounter any issues with setup (during any prescribed install / setup script) or after setup (namely during build) please open an issue. Most of the time these seem to be one off issues with missing packages on your dev station. There is an open issue for resolving this issue that will take some time to arrive, but any PRs to expand the setup / install scripts are welcome.
 
 * Run install script for your OS (ex: `yarn/npm install:arch`)
 * Run `yarn/npm setup:dev:env`
