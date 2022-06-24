@@ -54,6 +54,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
             Ok(ok) if ok => {
                 println!("Building OK response");
                 let body = String::from_utf8_lossy(&event.body());
+                println!("{body:?}");
                 if body == "1" {
                     println!("Received Ping for ack");
                     Response::builder()
