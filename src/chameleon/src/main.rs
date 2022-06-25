@@ -68,14 +68,46 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                         .header("content-type", "application/json")
                         .body("{ \"type\": 1 }".to_string())
                         .map_err(Box::new)?
+                } else if &body.kind == &2i64 {
+                    println!("Application command received");
+
+                    // methods for different types of application commands
+
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
+                } else if &body.kind == &3i64 {
+                    println!("Message component received");
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
+                } else if &body.kind == &4i64 {
+                    println!("Application command autocomplete received");
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
+                } else if &body.kind == &5i64 {
+                    println!("Modal submit received");
+                    Response::builder()
+                        .status(200)
+                        .header("content-type", "application/json")
+                        .body("{ \"type\": 1 }".to_string())
+                        .map_err(Box::new)?
                 } else {
-                    println!("non type 1 received -- sending simple response for now");
+                    println!("Unknown interaction type received, sending default response");
                     Response::builder()
                         .status(200)
                         .header("content-type", "application/json")
                         .body("{ \"type\": 1 }".to_string())
                         .map_err(Box::new)?
                 }
+
             }
             Ok(_) => Response::builder()
                 .status(401)
