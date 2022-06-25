@@ -72,13 +72,13 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                     println!("Application command received");
 
                     // methods for different types of application commands
-                    // id	        snowflake	                                            the ID of the invoked command
-                    // name	        string	                                                the name of the invoked command
-                    // type	        integer	                                                the type of the invoked command
-                    // resolved?	resolved data	                                        converted users + roles + channels + attachments
-                    // options?*	array of application command interaction data option	the params + values from the user
-                    // guild_id?	snowflake	                                            the id of the guild the command is registered to
-                    // target_id?	snowflake	                                            id of the user or message targeted by a user or message command
+                    // id	        snowflake	                                                the ID of the invoked command
+                    // name	        string	                                                    the name of the invoked command
+                    // type	        integer	                                                    the type of the invoked command
+                    // resolved?	resolved data	                                            converted users + roles + channels + attachments
+                    // options?*	array of application command interaction data option	    the params + values from the user
+                    // guild_id?	snowflake	                                                the id of the guild the command is registered to
+                    // target_id?	snowflake	                                                id of the user or message targeted by a user or message command
 
                     Response::builder()
                         .status(200)
