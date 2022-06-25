@@ -72,6 +72,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                     println!("Application command received");
 
                     // methods for different types of application commands
+                    // can probably leverage serenity constructs here
                     // id	        snowflake	                                                the ID of the invoked command
                     // name	        string	                                                    the name of the invoked command
                     // type	        integer	                                                    the type of the invoked command
