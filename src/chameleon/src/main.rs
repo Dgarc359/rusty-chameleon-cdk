@@ -70,6 +70,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                         .map_err(Box::new)?
                 } else if &body.kind == &2i64 {
                     println!("Application command received");
+                    println!(&body.name);
 
                     // methods for different types of application commands
                     // can probably leverage serenity constructs here

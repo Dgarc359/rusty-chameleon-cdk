@@ -21,6 +21,7 @@ export class RustyChameleonCdkStack extends Stack {
       environment: {
         RUST_BACKTRACE: '1',
         PUBLIC_KEY: process.env.PUBLIC_KEY || "", // will throw invalidStringLength error if not set
+        NASA_API_KEY: process.env.NASA_API_KEY || "",
       },
       architecture: Architecture.X86_64,
       // allowedOrigins: ['https://discord.com'],
