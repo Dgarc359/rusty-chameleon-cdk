@@ -8,7 +8,6 @@
     "install:arch": "yay openssl",
     "setup:dev:env": "cargo install cargo-lambda",
     "gen:lambda:rust": "cd src/ && cargo lambda new",
-    "build": "tsc",
     "deploy": "yarn package:rust && yarn cdk deploy",
     "package:rust": "yarn cargo:build",
     "cargo:build": "cd src/chameleon/ && cargo lambda build --release --output-format zip",
@@ -27,13 +26,14 @@
     "aws-cdk": "2.20.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.2.0",
-    "ts-node": "^9.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "~3.9.7"
   },
   "dependencies": {
     "aws-cdk-lib": "2.20.0",
     "aws-sdk": "^2.1153.0",
     "aws-xray-sdk-core": "^3.3.6",
+    "axios": "^0.27.2",
     "constructs": "^10.0.0",
     "dotenv": "^16.0.1",
     "source-map-support": "^0.5.16"

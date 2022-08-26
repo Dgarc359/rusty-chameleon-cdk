@@ -2,6 +2,7 @@ use dryoc::classic;
 use lambda_http::{run, service_fn, Error, IntoResponse, Request, Response};
 use std::env;
 use serde::{Serialize, Deserialize};
+use serde_json::{Value};
 
 fn verify_key(
     body: &[u8],
@@ -31,7 +32,13 @@ fn verify_key(
 // }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct DiscordData {
+    name: String
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct CustomBody {
+    data: DiscordData,
     #[serde(rename = "type")]
     kind: i64,
 }
@@ -50,6 +57,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
         .to_str()?;
 
     let public_key = env::var("PUBLIC_KEY")?;
+    // println!("{:#?}", event);
 
     Ok(
         match verify_key(
@@ -61,6 +69,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
             Ok(ok) if ok => {
                 println!("Building OK response");
                 let body: CustomBody = serde_json::from_slice(&event.body() as &[u8]).unwrap();
+                // let body: CustomBody = serde_json::from_str(&event.body() as String).unwrap()?;
                 if &body.kind == &1i64 {
                     println!("Received Ping for ack");
                     Response::builder()
@@ -70,7 +79,18 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
                         .map_err(Box::new)?
                 } else if &body.kind == &2i64 {
                     println!("Application command received");
-                    println!(&body.name);
+                    let command_name: String = body.data.name;
+                    println!("command_name: {:?}", command_name);
+
+                    if command_name == "foo" { // TODO:
+                        println!("command foo activated");
+                        return Response::builder()
+                            .status(200)
+                            .header("content-type", "application/json")
+                            .body("{ \"type\": 1 }".to_string())
+                            .map_err(Box::new)?
+                            
+                    }
 
                     // methods for different types of application commands
                     // can probably leverage serenity constructs here
