@@ -77,14 +77,17 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 										let command_name: String = body.data.name;
 										println!("command_name: {:?}", command_name);
 
-										if command_name == "foo" { // TODO:
+										if command_name == "foo" {
 												println!("command foo activated");
 												return Ok(Response::builder()
 														.status(200)
 														.header("content-type", "application/json")
 														.body("{ \"type\": 4, \"data\": { \"content\": \"bar\" } }".to_string())
 														.map_err(Box::new)?);
-														
+										}
+
+										if command_name == "space" {
+											println!("getting space picture");
 										}
 
 										// methods for different types of application commands
@@ -100,7 +103,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 										Response::builder()
 												.status(200)
 												.header("content-type", "application/json")
-												.body("{ \"type\": 1 }".to_string())
+												.body("{ \"type\": 4, \"data\": { \"content\": \"default response message\" } }".to_string())
 												.map_err(Box::new)?
 								} else if &body.kind == &3i64 {
 										println!("Message component received");
