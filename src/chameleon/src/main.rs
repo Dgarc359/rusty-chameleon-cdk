@@ -15,7 +15,9 @@ fn verify_key(
 		let mut pk = [0u8; 32];
 
 		hex::decode_to_slice(signature, &mut sig)?;
+		// dbg!("decoded signature: {:#?}", &sig);
 		hex::decode_to_slice(public_key, &mut pk)?;
+		// dbg!("decoded pk: {:#?}", &pk);
 
 		if classic::crypto_sign::crypto_sign_verify_detached(&sig, &message, &pk).is_ok() {
 				Ok(true)
@@ -50,7 +52,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 				.to_str()?;
 
 		let public_key = env::var("PUBLIC_KEY")?;
-		dbg!("{#?}", event);
+		// dbg!("{#?}", &event);
 
 		Ok(
 				match verify_key(
@@ -77,11 +79,11 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
 										if command_name == "foo" { // TODO:
 												println!("command foo activated");
-												Response::builder()
+												return Ok(Response::builder()
 														.status(200)
 														.header("content-type", "application/json")
-														.body("{ \"type\": 1 }".to_string())
-														.map_err(Box::new)?
+														.body("{ \"type\": 4, \"data\": { \"content\": \"bar\" } }".to_string())
+														.map_err(Box::new)?);
 														
 										}
 
