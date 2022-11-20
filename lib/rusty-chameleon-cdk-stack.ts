@@ -3,9 +3,6 @@ import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Architecture, Runtime } from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
-import { Parallel, StateMachine, Pass} from 'aws-cdk-lib/aws-stepfunctions';
-import * as sfnTask from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import {config} from 'dotenv';
 
 export class RustyChameleonCdkStack extends Stack {
@@ -24,32 +21,6 @@ export class RustyChameleonCdkStack extends Stack {
         NASA_API_KEY: process.env.NASA_API_KEY || "",
       },
       architecture: Architecture.X86_64,
-      // allowedOrigins: ['https://discord.com'],
     });
-
-
-    //const testLambda = new NodejsFunction(this, 'test-lambda', {
-    //  entry: path.join(__dirname, '../src/test-lambda/test.ts')
-    //})
-    
-    //const parallel = new Parallel(this, 'start');
-    //const testOurLambda = new sfnTask.LambdaInvoke(this, 'test-our-lambda', {
-    //  lambdaFunction: testLambda,
-
-    //  outputPath: '$.Payload'
-    //});
-
-    //const testRustLambda = new sfnTask.LambdaInvoke(this, 'test-rust-lambda', {
-    //  lambdaFunction: chameleon,
-    //  outputPath: '$.Payload'
-    //})
-
-    //parallel.branch(testOurLambda);
-    //parallel.branch(testRustLambda);
-
-    //const stepFnStateMachine = new StateMachine(this, 'state-machine', {
-    //  definition: parallel,
-      
-    //}) 
   }
 }
