@@ -36,6 +36,17 @@ struct CustomBody {
 		kind: i64,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct ResponseData {
+	content: String,
+}
+#[derive(Serialize, Deserialize, Debug)]
+struct CustomResponse {
+  #[serde(rename = "type")]
+  kind: i64,
+  data: ResponseData
+}
+
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 		let signature = event
 				.headers()
@@ -77,12 +88,16 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 
 										if command_name == "foo" { // TODO:
 												println!("command foo activated");
+												let res = CustomResponse {
+													kind: 4,
+													data: ResponseData { content: "bar".to_owned() }
+												};
 												Response::builder()
 														.status(200)
 														.header("content-type", "application/json")
-														.body("{ \"type\": 1 }".to_string())
+														// .body("{ \"type\": 1 }".to_string())
+														.body(serde_json::to_string(&res).unwrap())
 														.map_err(Box::new)?
-														
 										}
 
 										// methods for different types of application commands
