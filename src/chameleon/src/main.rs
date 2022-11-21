@@ -61,7 +61,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 				.to_str()?;
 
 		let public_key = env::var("PUBLIC_KEY")?;
-		dbg!("{#?}", event);
+		// dbg!("{#?}", event);
 
 		Ok(
 				match verify_key(
