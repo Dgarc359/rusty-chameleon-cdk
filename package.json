@@ -10,6 +10,7 @@
     "gen:lambda:rust": "cd src/ && cargo lambda new",
     "deploy": "yarn package:rust && yarn cdk deploy",
     "package:rust": "yarn cargo:build",
+    "build:chameleon": "docker build -t chameleon .",
     "cargo:build": "cd src/chameleon/ && cargo lambda build --release --output-format zip",
     "cargo:check": "cd src/chameleon/ && cargo check",
     "cargo:clean": "cd src/chameleon/ && cargo clean",

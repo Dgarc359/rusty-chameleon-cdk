@@ -95,7 +95,6 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 												return Ok(Response::builder()
 														.status(200)
 														.header("content-type", "application/json")
-														// .body("{ \"type\": 1 }".to_string())
 														.body(serde_json::to_string(&res).unwrap())
 														.map_err(Box::new)?);
 										}
