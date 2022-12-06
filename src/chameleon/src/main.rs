@@ -37,6 +37,27 @@ struct CustomBody {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+struct ImageData {
+  url: string,
+  height: i32,
+  width: i32,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct EmbedData {
+  #[serde(rename = "type")]
+  kind: String,
+  title: String,
+  color: i32,
+  image: ImageData
+}
+
+struct EmbedResponseData {
+  content: String,
+  embeds: Vec<EmbedData>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct ResponseData {
 	content: String,
 }
@@ -45,6 +66,13 @@ struct CustomResponse {
   #[serde(rename = "type")]
   kind: i64,
   data: ResponseData
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct CustomEmbedResponse {
+  #[serde(rename = "type")]
+  kind: i64,
+  data: EmbedResponseData
 }
 
 async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
@@ -86,7 +114,7 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 										let command_name: String = body.data.name;
 										println!("command_name: {:?}", command_name);
 
-										if command_name == "foo" { // TODO:
+										if command_name == "foo" {
 												println!("command foo activated");
 												let res = CustomResponse {
 													kind: 4,
@@ -97,7 +125,22 @@ async fn function_handler(event: Request) -> Result<impl IntoResponse, Error> {
 														.header("content-type", "application/json")
 														.body(serde_json::to_string(&res).unwrap())
 														.map_err(Box::new)?);
-										}
+										} else if command_name == "space" {
+                      let res = CustomEmbedResponse {
+                        kind: 4,
+                        data: EmbedResponseData { content: "blahblah".to_owned(), embeds: vec![
+                          EmbedData { kind: "rich".to_owned(), title: "Fake title".to_owned(), color: 0x00FFFF, image: ImageData { url: "https://apod.nasa.gov/apod/image/2212/M16Pillar_WebbOzsarac_1668.jpg".to_owned(), height: 0, width: 0 } }
+                        ] 
+                      };
+
+                      return Ok(Response::builder()
+														.status(200)
+														.header("content-type", "application/json")
+														.body(serde_json::to_string(&res).unwrap())
+														.map_err(Box::new)?);
+
+                      }
+                    }
 
 										// methods for different types of application commands
 										// can probably leverage serenity constructs here
